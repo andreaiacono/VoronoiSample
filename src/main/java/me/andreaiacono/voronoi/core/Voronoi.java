@@ -36,6 +36,8 @@ public class Voronoi {
                 return chebyshevDistance(point, site);
             case MANHATTAN:
                 return manhattanDistance(point, site);
+            case COSINE:
+                return cosineDistance(point, site);
         }
         throw new IllegalArgumentException("Should not arrive here");
     }
@@ -82,8 +84,8 @@ public class Voronoi {
         int y1 = point % SIZE;
         int dx = site.x - x1;
         int dy = site.y - y1;
-        double denX =  Math.max(0.00000000001, x1 + site.x);
-        double denY =  Math.max(0.00000000001, y1 + site.y);
+        double denX = Math.max(0.00000000001, x1 + site.x);
+        double denY = Math.max(0.00000000001, y1 + site.y);
 
         return Math.abs(dx) / denX + Math.abs(dy) / denY;
     }
@@ -94,6 +96,17 @@ public class Voronoi {
         double dx = site.x - x1;
         double dy = site.y - y1;
         return Math.abs(dx) + Math.abs(dy);
+    }
+
+    private double cosineDistance(int point, Site site) {
+        int x1 = point / SIZE;
+        int y1 = point % SIZE;
+        double num = x1 * site.x + y1 * site.y;
+        double den = Math.sqrt(x1 * x1 + site.x * site.x) + Math.sqrt(y1 * y1 + site.y * site.y);
+        if (den == 0) {
+            den = 0.0000000001;
+        }
+        return 1 - (num / den);
     }
 
     public List<Site> getSites() {

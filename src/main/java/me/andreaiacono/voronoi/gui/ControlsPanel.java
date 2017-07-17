@@ -45,16 +45,24 @@ public class ControlsPanel extends JPanel implements ActionListener, ChangeListe
         sl.putConstraint(SpringLayout.WEST, canberraRadioButton, 15, SpringLayout.WEST, this);
         sl.putConstraint(SpringLayout.NORTH, canberraRadioButton, 5, SpringLayout.SOUTH, chebyshevRadioButton);
 
+        JRadioButton cosineRadioButton = new JRadioButton("Cosine");
+        cosineRadioButton.setActionCommand(DistanceType.COSINE.toString());
+        cosineRadioButton.addActionListener(this);
+
+        sl.putConstraint(SpringLayout.WEST, cosineRadioButton, 15, SpringLayout.WEST, this);
+        sl.putConstraint(SpringLayout.NORTH, cosineRadioButton, 5, SpringLayout.SOUTH, canberraRadioButton);
+
 
         JRadioButton manhattanRadioButton = new JRadioButton("Manhattan");
         manhattanRadioButton.setActionCommand(DistanceType.MANHATTAN.toString());
         manhattanRadioButton.addActionListener(this);
 
         sl.putConstraint(SpringLayout.WEST, manhattanRadioButton, 15, SpringLayout.WEST, this);
-        sl.putConstraint(SpringLayout.NORTH, manhattanRadioButton, 5, SpringLayout.SOUTH, canberraRadioButton);
+        sl.putConstraint(SpringLayout.NORTH, manhattanRadioButton, 5, SpringLayout.SOUTH, cosineRadioButton);
 
 
         ButtonGroup distanceGroup = new ButtonGroup();
+        distanceGroup.add(cosineRadioButton);
         distanceGroup.add(canberraRadioButton);
         distanceGroup.add(euclideanRadioButton);
         distanceGroup.add(chebyshevRadioButton);
@@ -92,6 +100,7 @@ public class ControlsPanel extends JPanel implements ActionListener, ChangeListe
             }
         });
 
+        add(cosineRadioButton);
         add(animationButton);
         add(distanceLabel);
         add(canberraRadioButton);
@@ -106,16 +115,7 @@ public class ControlsPanel extends JPanel implements ActionListener, ChangeListe
     public void actionPerformed(ActionEvent e) {
 
         String actionCommand = e.getActionCommand();
-
-        if (actionCommand.equals(DistanceType.EUCLIDEAN.toString())) {
-            main.getVoronoi().setDistanceType(DistanceType.EUCLIDEAN);
-        } else if (actionCommand.equals(DistanceType.CHEBYSHEV.toString())) {
-            main.getVoronoi().setDistanceType(DistanceType.CHEBYSHEV);
-        } else if (actionCommand.equals(DistanceType.CANBERRA.toString())) {
-            main.getVoronoi().setDistanceType(DistanceType.CANBERRA);
-        } else if (actionCommand.equals(DistanceType.MANHATTAN.toString())) {
-            main.getVoronoi().setDistanceType(DistanceType.MANHATTAN);
-        }
+        main.getVoronoi().setDistanceType(DistanceType.valueOf(actionCommand));
         main.repaint();
     }
 
