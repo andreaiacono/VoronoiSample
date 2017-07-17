@@ -1,5 +1,6 @@
 package me.andreaiacono.voronoi.gui;
 
+import me.andreaiacono.voronoi.core.Constants;
 import me.andreaiacono.voronoi.core.DistanceType;
 
 import javax.swing.*;
@@ -18,19 +19,23 @@ public class ControlsPanel extends JPanel implements ActionListener, ChangeListe
         SpringLayout sl = new SpringLayout();
         setLayout(sl);
 
-        JRadioButton euclideanRadioButton = new JRadioButton("Euclidean Distance");
+        JLabel distanceLabel = new JLabel("Distance: ");
+        sl.putConstraint(SpringLayout.WEST, distanceLabel, 5, SpringLayout.WEST, this);
+        sl.putConstraint(SpringLayout.NORTH, distanceLabel, 5, SpringLayout.NORTH, this);
+
+        JRadioButton euclideanRadioButton = new JRadioButton("Euclidean");
         euclideanRadioButton.setActionCommand(DistanceType.EUCLIDEAN.toString());
         euclideanRadioButton.setSelected(true);
         euclideanRadioButton.addActionListener(this);
 
-        sl.putConstraint(SpringLayout.WEST, euclideanRadioButton, 5, SpringLayout.WEST, this);
-        sl.putConstraint(SpringLayout.NORTH, euclideanRadioButton, 5, SpringLayout.NORTH, this);
+        sl.putConstraint(SpringLayout.WEST, euclideanRadioButton, 15, SpringLayout.WEST, this);
+        sl.putConstraint(SpringLayout.NORTH, euclideanRadioButton, 5, SpringLayout.SOUTH, distanceLabel);
 
-        JRadioButton manhattanRadioButton = new JRadioButton("Manhattan Distance");
+        JRadioButton manhattanRadioButton = new JRadioButton("Manhattan");
         manhattanRadioButton.setActionCommand(DistanceType.MANHATTAN.toString());
         manhattanRadioButton.addActionListener(this);
 
-        sl.putConstraint(SpringLayout.WEST, manhattanRadioButton , 5, SpringLayout.WEST, this);
+        sl.putConstraint(SpringLayout.WEST, manhattanRadioButton , 15, SpringLayout.WEST, this);
         sl.putConstraint(SpringLayout.NORTH, manhattanRadioButton, 5, SpringLayout.SOUTH, euclideanRadioButton);
 
 
@@ -38,33 +43,25 @@ public class ControlsPanel extends JPanel implements ActionListener, ChangeListe
         distanceGroup.add(euclideanRadioButton);
         distanceGroup.add(manhattanRadioButton);
 
-        JButton addPointsButton = new JButton("Add Points");
-        addPointsButton.addActionListener(this);
+        JLabel sitesLabel = new JLabel("Sites: ");
+        JSlider sitesSlider = new JSlider(JSlider.HORIZONTAL, 2, Constants.MAX_SITES, Constants.INITIAL_SITES);
+        sitesSlider.setName("sites");
+        sitesSlider.addChangeListener(this);
+        sitesSlider.setPaintTicks(true);
+        sitesSlider.setPaintLabels(true);
 
-        sl.putConstraint(SpringLayout.WEST, addPointsButton, 5, SpringLayout.WEST, this);
-        sl.putConstraint(SpringLayout.SOUTH, addPointsButton, -5, SpringLayout.SOUTH, this);
+        sl.putConstraint(SpringLayout.WEST, sitesLabel, 5, SpringLayout.WEST, this);
+        sl.putConstraint(SpringLayout.SOUTH, sitesLabel, -20, SpringLayout.SOUTH, this);
 
+        sl.putConstraint(SpringLayout.WEST, sitesSlider, 0, SpringLayout.EAST, sitesLabel);
+        sl.putConstraint(SpringLayout.EAST, sitesSlider, -5, SpringLayout.EAST, this);
+        sl.putConstraint(SpringLayout.SOUTH, sitesSlider, -5, SpringLayout.SOUTH, this);
 
-
-        JLabel pointsLabel = new JLabel("Points: ");
-        JSlider pointsSlider = new JSlider(JSlider.HORIZONTAL, 1, 100, 10);
-        pointsSlider.setName("points");
-        pointsSlider.addChangeListener(this);
-        pointsSlider.setPaintTicks(true);
-        pointsSlider.setPaintLabels(true);
-
-        sl.putConstraint(SpringLayout.WEST, pointsLabel, 5, SpringLayout.WEST, this);
-        sl.putConstraint(SpringLayout.SOUTH, pointsLabel, -10, SpringLayout.NORTH, addPointsButton);
-
-        sl.putConstraint(SpringLayout.WEST, pointsSlider, 5, SpringLayout.EAST, pointsLabel);
-        sl.putConstraint(SpringLayout.EAST, pointsSlider, -5, SpringLayout.EAST, this);
-        sl.putConstraint(SpringLayout.SOUTH, pointsSlider, 5, SpringLayout.NORTH, addPointsButton);
-
+        add(distanceLabel);
         add(euclideanRadioButton);
         add(manhattanRadioButton);
-        add(addPointsButton);
-        add(pointsLabel);
-        add(pointsSlider);
+        add(sitesLabel);
+        add(sitesSlider);
     }
 
     @Override
@@ -83,7 +80,9 @@ public class ControlsPanel extends JPanel implements ActionListener, ChangeListe
 
     @Override
     public void stateChanged(ChangeEvent e) {
-
+        int n = ((JSlider)e.getSource()).getValue();
+        main.getVoronoi().setVisibleSites(n);
+        main.getCanvasPanel().setVisibleSites(n);
     }
 
 }

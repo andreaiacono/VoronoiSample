@@ -1,5 +1,6 @@
 package me.andreaiacono.voronoi.gui;
 
+import me.andreaiacono.voronoi.core.Constants;
 import me.andreaiacono.voronoi.core.Site;
 import me.andreaiacono.voronoi.core.Voronoi;
 
@@ -12,13 +13,14 @@ import java.awt.*;
 
 public class CanvasPanel extends JPanel implements MouseListener {
 
-    private final Color[] colors;
     private Main main;
+    private int visibleSites = Constants.INITIAL_SITES;
+    private final Color[] colors = new Color[Constants.MAX_SITES];
+
 
     public CanvasPanel(Main main) {
 
-        colors = generateColors(100);
-
+        generateColors(Constants.INITIAL_SITES);
         this.main = main;
         this.addMouseListener(this);
         setBackground(Color.WHITE);
@@ -29,37 +31,37 @@ public class CanvasPanel extends JPanel implements MouseListener {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         int pointSize = 8;
-        int size = 500;
         Voronoi voronoi = main.getVoronoi();
         int[] points = voronoi.findDiagrams();
-        for (int i=0; i<points.length; i++) {
+        for (int i = 0; i < points.length; i++) {
             g.setColor(colors[points[i]]);
-            int x = i/size;
-            int y = i%size;
-            g.drawLine(x,y,x,y);
+            int x = i / Constants.SIZE;
+            int y = i % Constants.SIZE;
+            g.drawLine(x, y, x, y);
         }
-
 
         List<Site> sites = voronoi.getSites();
         Color color = Color.GRAY;
         float mf = 1.0f;
-        sites.forEach(site -> {
+        for (int i = 0; i < visibleSites; i++) {
+            Site site = sites.get(i);
             g.setColor(color);
             g.fillOval(((int) (site.x * mf)), ((int) (site.y * mf)), pointSize, pointSize);
             g.setColor(Color.BLACK);
             g.drawOval(((int) (site.x * mf)), ((int) (site.y * mf)), pointSize, pointSize);
-        });
-
+        }
     }
 
-    public Color[] generateColors(int n)
-    {
-        Color[] cols = new Color[n];
-        for(int i = 0; i < n; i++)
-        {
-            cols[i] = Color.getHSBColor((float) i / (float) n, 0.85f, 1.0f);
+    public void setVisibleSites(int n) {
+        visibleSites = n;
+        generateColors(visibleSites);
+        repaint();
+    }
+
+    public void generateColors(int n) {
+        for (int i = 0; i < n; i++) {
+            colors[i] = Color.getHSBColor((float) i / (float) n, 0.85f, 1.0f);
         }
-        return cols;
     }
 
     @Override

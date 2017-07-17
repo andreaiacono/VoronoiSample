@@ -1,7 +1,5 @@
 package me.andreaiacono.voronoi.core;
 
-import me.andreaiacono.voronoi.gui.Main;
-
 import java.util.*;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -11,20 +9,13 @@ import static me.andreaiacono.voronoi.core.Constants.SIZE;
 public class Voronoi {
 
     DistanceType distanceType;
-
     List<Site> sites = new ArrayList<>();
+    int visibleSites = Constants.INITIAL_SITES;
 
-    private Main main;
-    private int colorsNumber;
-    Random r;
-
-    public Voronoi(Main main, int colorsNumber) {
-        this.main = main;
-        this.colorsNumber = colorsNumber;
-        r = new Random();
+    public Voronoi() {
+        Random r = new Random();
         distanceType = DistanceType.EUCLIDEAN;
-
-        IntStream.range(0, 50).forEach(n -> {
+        IntStream.range(0, Constants.MAX_SITES).forEach(n -> {
             int x = Math.abs(r.nextInt()) % SIZE;
             int y = Math.abs(r.nextInt()) % SIZE;
             addSite(new Site(x, y));
@@ -36,7 +27,6 @@ public class Voronoi {
     }
 
     private double distance(int point, Site site) {
-
         switch (distanceType) {
             case EUCLIDEAN:
                 return euclideanDistance(point, site);
@@ -53,8 +43,7 @@ public class Voronoi {
         for (int i = 0; i < SIZE * SIZE; i++) {
             double min = Double.MAX_VALUE;
             int index = 0;
-            Site p = new Site(i / SIZE, i % SIZE);
-            for (int j = 0; j < sites.size(); j++) {
+            for (int j = 0; j < visibleSites; j++) {
                 double distance = distance(i, sites.get(j));
                 if (min > distance) {
                     min = distance;
@@ -67,13 +56,12 @@ public class Voronoi {
         return points;
     }
 
-
     private double euclideanDistance(int point, Site site) {
         int x1 = point / SIZE;
         int y1 = point % SIZE;
         double dx = site.x - x1;
         double dy = site.y - y1;
-        return Math.sqrt(dx * dx + dy * dy); // Euclidean distance formula
+        return Math.sqrt(dx * dx + dy * dy);
     }
 
     private double manhattanDistance(int point, Site site) {
@@ -92,4 +80,7 @@ public class Voronoi {
         this.distanceType = distanceType;
     }
 
+    public void setVisibleSites(int value) {
+        visibleSites = value;
+    }
 }

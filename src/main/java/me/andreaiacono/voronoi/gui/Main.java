@@ -28,8 +28,8 @@ public class Main extends JFrame implements ActionListener {
 
         super("Voronoi Diagrams");
 
-        voronoi = new Voronoi(this, 50);
-        setSize(800, 600);
+        voronoi = new Voronoi();
+        setSize(750, 627);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
@@ -56,6 +56,9 @@ public class Main extends JFrame implements ActionListener {
         return voronoi;
     }
 
+    public CanvasPanel getCanvasPanel() {
+        return canvasPanel;
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -72,3 +75,5 @@ public class Main extends JFrame implements ActionListener {
         repaint();
     }
 }
+
+

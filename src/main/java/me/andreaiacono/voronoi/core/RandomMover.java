@@ -12,7 +12,10 @@ public class RandomMover extends SwingWorker<Void, Void> {
 
     @Override
     protected Void doInBackground() throws Exception {
-        voronoi.getSites().forEach(Site::move);
+        int visibleSites = voronoi.visibleSites;
+        for (int i=0; i < visibleSites; i++) {
+            voronoi.getSites().get(i).move();
+        }
         return null;
     }
 }

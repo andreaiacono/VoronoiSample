@@ -18,17 +18,17 @@ public class Site {
 
         dx = r.nextInt(SPEED + SPEED + 1) - SPEED;
         dy = r.nextInt(SPEED + SPEED + 1) - SPEED;
-//        System.out.println("dx=" + dx + " dy=" + dy);
     }
 
     public void move() {
-        x += dx % Constants.SIZE;
-        y += dy % Constants.SIZE;
-//        if (x < 0) {
-//            x = Constants.SIZE;
-//        }
-//
-//        Math.max(0, Math.min(Constants.SIZE, dx));
-//        this.y += Math.max(0, Math.min(Constants.SIZE, dy));
+        x = (x + dx) % Constants.SIZE;
+        if (x < 0) {
+            x = Constants.SIZE;
+        }
+
+        y = (y + dy) % Constants.SIZE;
+        if (y < 0) {
+            y = Constants.SIZE;
+        }
     }
 }
