@@ -30,6 +30,10 @@ public class Voronoi {
         switch (distanceType) {
             case EUCLIDEAN:
                 return euclideanDistance(point, site);
+            case CANBERRA:
+                return canberraDistance(point, site);
+            case CHEBYSHEV:
+                return chebyshevDistance(point, site);
             case MANHATTAN:
                 return manhattanDistance(point, site);
         }
@@ -59,9 +63,29 @@ public class Voronoi {
     private double euclideanDistance(int point, Site site) {
         int x1 = point / SIZE;
         int y1 = point % SIZE;
-        double dx = site.x - x1;
-        double dy = site.y - y1;
+        int dx = site.x - x1;
+        int dy = site.y - y1;
         return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    private double chebyshevDistance(int point, Site site) {
+        int x1 = point / SIZE;
+        int y1 = point % SIZE;
+        int dx = site.x - x1;
+        int dy = site.y - y1;
+//        return Math.pow(Math.pow(Math.abs(dx), 3) + Math.pow(Math.abs(dy), 3), 1/3);
+        return Math.max(Math.abs(dx), Math.abs(dy));
+    }
+
+    private double canberraDistance(int point, Site site) {
+        int x1 = point / SIZE;
+        int y1 = point % SIZE;
+        int dx = site.x - x1;
+        int dy = site.y - y1;
+        double denX =  Math.max(0.00000000001, x1 + site.x);
+        double denY =  Math.max(0.00000000001, y1 + site.y);
+
+        return Math.abs(dx) / denX + Math.abs(dy) / denY;
     }
 
     private double manhattanDistance(int point, Site site) {

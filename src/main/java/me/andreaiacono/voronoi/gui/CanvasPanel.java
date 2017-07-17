@@ -4,14 +4,14 @@ import me.andreaiacono.voronoi.core.Constants;
 import me.andreaiacono.voronoi.core.Site;
 import me.andreaiacono.voronoi.core.Voronoi;
 
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import java.awt.*;
 
-public class CanvasPanel extends JPanel implements MouseListener {
+import static me.andreaiacono.voronoi.core.Constants.SIZE;
+
+public class CanvasPanel extends JPanel {
 
     private Main main;
     private int visibleSites = Constants.INITIAL_SITES;
@@ -19,24 +19,21 @@ public class CanvasPanel extends JPanel implements MouseListener {
 
 
     public CanvasPanel(Main main) {
-
-        generateColors(Constants.INITIAL_SITES);
         this.main = main;
-        this.addMouseListener(this);
-        setBackground(Color.WHITE);
         setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
+        generateColors(Constants.INITIAL_SITES);
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        int pointSize = 8;
+        int pointSize = 5;
         Voronoi voronoi = main.getVoronoi();
         int[] points = voronoi.findDiagrams();
         for (int i = 0; i < points.length; i++) {
             g.setColor(colors[points[i]]);
-            int x = i / Constants.SIZE;
-            int y = i % Constants.SIZE;
+            int x = i / SIZE;
+            int y = i % SIZE;
             g.drawLine(x, y, x, y);
         }
 
@@ -45,7 +42,7 @@ public class CanvasPanel extends JPanel implements MouseListener {
         float mf = 1.0f;
         for (int i = 0; i < visibleSites; i++) {
             Site site = sites.get(i);
-            g.setColor(color);
+            g.setColor(colors[i]);
             g.fillOval(((int) (site.x * mf)), ((int) (site.y * mf)), pointSize, pointSize);
             g.setColor(Color.BLACK);
             g.drawOval(((int) (site.x * mf)), ((int) (site.y * mf)), pointSize, pointSize);
@@ -64,30 +61,4 @@ public class CanvasPanel extends JPanel implements MouseListener {
         }
     }
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        Site site = new Site(e.getX(), e.getY());
-        main.getVoronoi().addSite(site);
-        repaint();
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
-    }
 }

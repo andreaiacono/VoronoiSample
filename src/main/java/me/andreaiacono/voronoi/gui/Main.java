@@ -30,6 +30,7 @@ public class Main extends JFrame implements ActionListener {
 
         voronoi = new Voronoi();
         setSize(750, 627);
+        setResizable(false);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");

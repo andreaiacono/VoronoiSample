@@ -2,5 +2,5 @@ package me.andreaiacono.voronoi.core;
 
 public enum DistanceType {
 
-    EUCLIDEAN, MANHATTAN
+    EUCLIDEAN, CHEBYSHEV, MANHATTAN, CANBERRA
 }
