@@ -1,19 +1,24 @@
 package me.andreaiacono.voronoi.gui;
 
+import me.andreaiacono.voronoi.core.RandomMover;
+import me.andreaiacono.voronoi.core.Site;
 import me.andreaiacono.voronoi.core.Voronoi;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class Main extends JFrame {
+public class Main extends JFrame implements ActionListener {
 
     private final ControlsPanel controlsPanel;
     private final CanvasPanel canvasPanel;
+    private RandomMover randomMover;
+    private final Timer timer;
     private Voronoi voronoi;
 
     private JLabel statusBar;
-    private JProgressBar progressBar;
 
     public static void main(String[] args) throws Exception {
         new Main();
@@ -40,30 +45,11 @@ public class Main extends JFrame {
         divider.setDividerLocation(600);
         add(divider, BorderLayout.CENTER);
 
-//        add(createStatusPanel(), BorderLayout.SOUTH);
+        timer = new Timer(50, this);
+        timer.setInitialDelay(1000);
+        timer.start();
 
         setVisible(true);
-    }
-
-    private JPanel createStatusPanel() {
-        // sets the status bar
-        statusBar = new JLabel("Ready");
-        statusBar.setBorder(new BevelBorder(BevelBorder.LOWERED));
-        add(statusBar, BorderLayout.SOUTH);
-
-        JPanel statusPanel = new JPanel(new GridBagLayout());
-//        GridBagConstraints c = new GridBagConstraints();
-//        c.fill = GridBagConstraints.HORIZONTAL;
-//        progressBar = new JProgressBar(0, 100);
-//        progressBar.setBorder(new BevelBorder(BevelBorder.LOWERED));
-//        progressBar.setValue(0);
-//        c.gridx = 0;
-//        c.weightx = 1;
-//        statusPanel.add(statusBar, c);
-//        c.gridx = 10;
-//        c.weightx = 0;
-//        statusPanel.add(progressBar, c);
-        return statusPanel;
     }
 
     public Voronoi getVoronoi() {
@@ -71,5 +57,18 @@ public class Main extends JFrame {
     }
 
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+//        new SwingWorker<Void, Void>() {
+//            @Override
+//            protected Void doInBackground() throws Exception {
+//                voronoi.getSites().forEach(Site::move);
+//                return null;
+//            }
+//        }.execute();
 
+        randomMover = new RandomMover(getVoronoi());
+        randomMover.execute();
+        repaint();
+    }
 }

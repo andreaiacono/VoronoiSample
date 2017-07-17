@@ -2,18 +2,17 @@ package me.andreaiacono.voronoi.core;
 
 import me.andreaiacono.voronoi.gui.Main;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.stream.IntStream;
+
+import static me.andreaiacono.voronoi.core.Constants.SIZE;
 
 public class Voronoi {
 
     DistanceType distanceType;
 
-    List<Point> sites = new ArrayList<>();
-
-    int SIZE = 500;
+    List<Site> sites = new ArrayList<>();
 
     private Main main;
     private int colorsNumber;
@@ -28,32 +27,35 @@ public class Voronoi {
         IntStream.range(0, 50).forEach(n -> {
             int x = Math.abs(r.nextInt()) % SIZE;
             int y = Math.abs(r.nextInt()) % SIZE;
-            addPoint(new Point(x, y));
+            addSite(new Site(x, y));
         });
     }
 
-    public void addPoint(Point point) {
-        sites.add(point);
+    public void addSite(Site site) {
+        sites.add(site);
+    }
+
+    private double distance(int point, Site site) {
+
+        switch (distanceType) {
+            case EUCLIDEAN:
+                return euclideanDistance(point, site);
+            case MANHATTAN:
+                return manhattanDistance(point, site);
+        }
+        throw new IllegalArgumentException("Should not arrive here");
     }
 
     public int[] findDiagrams() {
 
         int[] points = new int[SIZE * SIZE];
 
-        for (int i=0; i<SIZE*SIZE; i++) {
+        for (int i = 0; i < SIZE * SIZE; i++) {
             double min = Double.MAX_VALUE;
             int index = 0;
-            Point p = new Point(i / SIZE, i % SIZE);
-            for (int j=0; j<sites.size(); j++) {
-                double distance = 0;
-                switch (distanceType) {
-                    case EUCLIDEAN:
-                        distance = euclideanDistance(p, sites.get(j));
-                        break;
-                    case MANHATTAN:
-                        distance = manhattanDistance(p, sites.get(j));
-                }
-
+            Site p = new Site(i / SIZE, i % SIZE);
+            for (int j = 0; j < sites.size(); j++) {
+                double distance = distance(i, sites.get(j));
                 if (min > distance) {
                     min = distance;
                     index = j;
@@ -66,26 +68,28 @@ public class Voronoi {
     }
 
 
-    private double euclideanDistance(Point p1, Point p2) {
-        double dx = p2.getX() - p1.getX();
-        double dy = p2.getY() - p1.getY();
+    private double euclideanDistance(int point, Site site) {
+        int x1 = point / SIZE;
+        int y1 = point % SIZE;
+        double dx = site.x - x1;
+        double dy = site.y - y1;
         return Math.sqrt(dx * dx + dy * dy); // Euclidean distance formula
     }
 
-    private double manhattanDistance(Point p1, Point p2) {
-        double dx = p2.getX() - p1.getX();
-        double dy = p2.getY() - p1.getY();
+    private double manhattanDistance(int point, Site site) {
+        int x1 = point / SIZE;
+        int y1 = point % SIZE;
+        double dx = site.x - x1;
+        double dy = site.y - y1;
         return Math.abs(dx) + Math.abs(dy);
     }
 
-    public List<Point> getSites() {
+    public List<Site> getSites() {
         return sites;
     }
 
     public void setDistanceType(DistanceType distanceType) {
         this.distanceType = distanceType;
     }
-
-
 
 }

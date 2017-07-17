@@ -1,9 +1,8 @@
 package me.andreaiacono.voronoi.gui;
 
+import me.andreaiacono.voronoi.core.Site;
 import me.andreaiacono.voronoi.core.Voronoi;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
@@ -41,14 +40,14 @@ public class CanvasPanel extends JPanel implements MouseListener {
         }
 
 
-        List<Point> sites = voronoi.getSites();
+        List<Site> sites = voronoi.getSites();
         Color color = Color.GRAY;
         float mf = 1.0f;
-        sites.forEach(point -> {
+        sites.forEach(site -> {
             g.setColor(color);
-            g.fillOval(((int) (point.getX() * mf)), ((int) (point.getY() * mf)), pointSize, pointSize);
+            g.fillOval(((int) (site.x * mf)), ((int) (site.y * mf)), pointSize, pointSize);
             g.setColor(Color.BLACK);
-            g.drawOval(((int) (point.getX() * mf)), ((int) (point.getY() * mf)), pointSize, pointSize);
+            g.drawOval(((int) (site.x * mf)), ((int) (site.y * mf)), pointSize, pointSize);
         });
 
     }
@@ -65,8 +64,8 @@ public class CanvasPanel extends JPanel implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        Point point = new Point(e.getX(), e.getY());
-        main.getVoronoi().addPoint(point);
+        Site site = new Site(e.getX(), e.getY());
+        main.getVoronoi().addSite(site);
         repaint();
     }
 
