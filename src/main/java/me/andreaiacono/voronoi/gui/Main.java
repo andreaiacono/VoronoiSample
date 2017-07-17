@@ -46,9 +46,6 @@ public class Main extends JFrame implements ActionListener {
         add(divider, BorderLayout.CENTER);
 
         timer = new Timer(50, this);
-        timer.setInitialDelay(1000);
-        timer.start();
-
         setVisible(true);
     }
 
@@ -58,6 +55,14 @@ public class Main extends JFrame implements ActionListener {
 
     public CanvasPanel getCanvasPanel() {
         return canvasPanel;
+    }
+
+    public void restartTimer() {
+        timer.restart();
+    }
+
+    public void stopTimer() {
+        timer.stop();
     }
 
     @Override

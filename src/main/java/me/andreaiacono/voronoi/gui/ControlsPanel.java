@@ -51,12 +51,31 @@ public class ControlsPanel extends JPanel implements ActionListener, ChangeListe
         sitesSlider.setPaintLabels(true);
 
         sl.putConstraint(SpringLayout.WEST, sitesLabel, 5, SpringLayout.WEST, this);
-        sl.putConstraint(SpringLayout.SOUTH, sitesLabel, -20, SpringLayout.SOUTH, this);
+        sl.putConstraint(SpringLayout.NORTH, sitesLabel, 40, SpringLayout.SOUTH, euclideanRadioButton);
 
         sl.putConstraint(SpringLayout.WEST, sitesSlider, 0, SpringLayout.EAST, sitesLabel);
         sl.putConstraint(SpringLayout.EAST, sitesSlider, -5, SpringLayout.EAST, this);
-        sl.putConstraint(SpringLayout.SOUTH, sitesSlider, -5, SpringLayout.SOUTH, this);
+        sl.putConstraint(SpringLayout.NORTH, sitesSlider, 32, SpringLayout.SOUTH, euclideanRadioButton);
 
+
+        JButton animationButton = new JButton("Start animation");
+        animationButton.setActionCommand("start");
+        sl.putConstraint(SpringLayout.WEST, animationButton, 5, SpringLayout.WEST, this);
+        sl.putConstraint(SpringLayout.EAST, animationButton, -5,  SpringLayout.EAST, this);
+        sl.putConstraint(SpringLayout.SOUTH, animationButton, -5, SpringLayout.SOUTH, this);
+        animationButton.addActionListener(e -> {
+            if (animationButton.getActionCommand().equals("start")) {
+                main.restartTimer();
+                animationButton.setActionCommand("stop");
+                animationButton.setText("Stop Animation");
+            } else {
+                main.stopTimer();
+                animationButton.setActionCommand("start");
+                animationButton.setText("Start Animation");
+            }
+        });
+
+        add(animationButton);
         add(distanceLabel);
         add(euclideanRadioButton);
         add(manhattanRadioButton);
