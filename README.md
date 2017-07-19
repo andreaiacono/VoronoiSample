@@ -16,5 +16,10 @@ The project is built with Maven, so to create the JAR you just need to launch:
 
     mvn clean install
     
-and then launch the jar file created in the `target` directory.
- 
+and then launch it:
+
+    java -jar target/Voronoi.jar
+    
+
+## Improvements
+Implementing Fortune's Algorithm for lowering time complexity to O(n log n)
